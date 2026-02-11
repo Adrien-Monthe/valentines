@@ -11,6 +11,13 @@
   const heartSymbols = ['❤', '💕', '💖'];
   const confettiColors = ['#ff7eb3', '#ff4f7d', '#ffd166', '#fff', '#c56cf0'];
 
+  // Initialize EmailJS with your public key
+  // TODO: Replace with your actual EmailJS public key after setup
+  // Get your key from: https://dashboard.emailjs.com/admin/account
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your actual public key
+  }
+
   const heartTimer = setInterval(() => spawnHeart(hero), 900);
 
   yesBtn.addEventListener('click', () => {
@@ -19,6 +26,9 @@
     note?.classList.remove('hidden');
     launchConfetti(confettiColors);
     modal?.classList.remove('hidden');
+
+    // Send email notification
+    sendEmailNotification();
   });
 
   const dodge = () => playfulMove(maybeBtn, hero);
@@ -32,6 +42,30 @@
   });
 
   window.addEventListener('beforeunload', () => clearInterval(heartTimer));
+
+  function sendEmailNotification() {
+    // Check if EmailJS is loaded
+    if (typeof emailjs === 'undefined') {
+      console.log('EmailJS not loaded - email notification skipped');
+      return;
+    }
+
+    const templateParams = {
+      to_name: 'Adrien',
+      from_name: 'Moon (Kesita)',
+      message: 'She said YES! 🎉💘 Kesita accepted your Valentine proposal!',
+      reply_to: 'noreply@valentine.com'
+    };
+
+    // TODO: Replace with your actual service ID and template ID
+    // Get these from: https://dashboard.emailjs.com/admin
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+      .then((response) => {
+        console.log('Email sent successfully!', response.status, response.text);
+      }, (error) => {
+        console.log('Email failed to send:', error);
+      });
+  }
 
   function spawnHeart(container) {
     const heart = document.createElement('span');
