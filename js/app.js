@@ -24,7 +24,7 @@
 
   // Initialize EmailJS with your public key (replace placeholder when ready)
   if (typeof emailjs !== 'undefined') {
-    emailjs.init('YOUR_PUBLIC_KEY');
+    emailjs.init('UMRhWCwxnVALG4kC6');
   }
 
   const heartTimer = setInterval(() => spawnHeart(hero), 900);
@@ -120,10 +120,11 @@
     const templateParams = {
       to_name: 'Adrien',
       from_name: 'Moon (Kesita)',
+      to_email: 'montheadrien@gmail.com',  // Add your email here
       message: 'She said YES! 🎉💘 Kesita accepted your Valentine proposal!',
       reply_to: 'noreply@valentine.com'
     };
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+    emailjs.send('service_2frsak7', 'template_acftsg5', templateParams)
       .then((response) => console.log('Email sent', response.status, response.text))
       .catch((error) => console.log('Email failed', error));
   }
