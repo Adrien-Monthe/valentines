@@ -1,0 +1,95 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Will you be my Valentine?</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="A tiny love note asking Moon to be my Valentine, even from afar.">
+
+  <meta property="og:title" content="Will you be my Valentine?">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://">
+  <meta property="og:image" content="icon.png">
+  <meta property="og:image:alt" content="Pink heart with a soft gradient">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#ffb7c5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="valentine">
+  <main class="page">
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <p class="eyebrow">February 14 · just us</p>
+      <h1 id="hero-title">Moon, will you be my Valentine?</h1>
+      <p class="lede">I know we're miles apart, but you stay right here with me. Let me make this Valentine yours, even from a distance.</p>
+      <div class="cta-row">
+        <button class="btn btn-yes" id="yes-btn">Yes! 💘</button>
+        <button class="btn btn-maybe" id="maybe-btn" aria-label="Try to click me">Maybe later 🙈</button>
+      </div>
+      <p class="microcopy" id="hover-hint">The shy button might try to escape—can you catch it?</p>
+    </section>
+
+    <section class="plan" aria-labelledby="plan-title">
+      <div class="section-header">
+        <h2 id="plan-title">Reasons to say yes</h2>
+        <p>Because you are my favorite person in every timezone.</p>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <span class="icon">🌙</span>
+          <h3>You're my Moon</h3>
+          <p>You light up my nights and make the distance feel smaller.</p>
+        </article>
+        <article class="card">
+          <span class="icon">📞</span>
+          <h3>Cozy call</h3>
+          <p>A video date with your playlist and my worst jokes queued up.</p>
+        </article>
+        <article class="card">
+          <span class="icon">📦</span>
+          <h3>Little surprises</h3>
+          <p>A care package on the way, filled with the things you love.</p>
+        </article>
+        <article class="card">
+          <span class="icon">💌</span>
+          <h3>One promise</h3>
+          <p>No matter the miles, I'm yours—today and always.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="note hidden" id="response-note" aria-live="polite">
+      <div class="note-card">
+        <p class="eyebrow">Yay!</p>
+        <h2>Moon said yes! 🎉</h2>
+        <p>I can't wait to spend the day with you—screens and miles can't stop us.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Made with all my love. ♥</p>
+    </footer>
+  </main>
+
+  <div class="modal hidden" id="love-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <h2 id="modal-title">Best decision ever</h2>
+      <p>Thank you for saying yes, Kesita. You're my Moon, always.</p>
+      <button class="btn btn-ghost" id="close-modal">Can't wait!</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
