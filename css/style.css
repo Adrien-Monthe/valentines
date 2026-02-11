@@ -268,9 +268,7 @@ body.valentine {
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at 20% 20%, rgba(255, 126, 179, 0.18), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(255, 190, 200, 0.3), transparent 32%),
-    linear-gradient(135deg, #fff5f8, #ffe2ec);
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f8 50%, #fffbfc 100%);
 }
 
 .page {
@@ -283,18 +281,19 @@ body.valentine {
   position: relative;
   padding: 64px 32px 72px;
   border-radius: 28px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 233, 241, 0.9));
-  box-shadow: var(--shadow);
+  background: #ffffff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
   overflow: hidden;
   text-align: center;
   isolation: isolate;
+  border: 1px solid rgba(255, 126, 179, 0.1);
 }
 
 .hero::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(255, 126, 179, 0.12), transparent 50%);
+  background: radial-gradient(circle at 50% 100%, rgba(255, 126, 179, 0.05), transparent 60%);
   z-index: 0;
 }
 
@@ -439,26 +438,193 @@ body.valentine {
   color: var(--muted);
 }
 
-.gallery {
+/* Card with background image */
+.card-with-bg {
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  min-height: 200px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.card-with-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 26, 29, 0.85) 0%, rgba(30, 26, 29, 0.4) 60%, transparent 100%);
+  z-index: 1;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  padding: 14px;
+}
+
+.card-with-bg .icon {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.card-with-bg h3,
+.card-with-bg p {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Interactive Gallery */
+.gallery-section {
+  margin-top: 56px;
+}
+
+.gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
-  margin-top: 8px;
+  margin-top: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: pointer;
+  aspect-ratio: 1;
+  background: #f5f5f5;
 }
 
 .gallery-img {
   width: 100%;
-  height: 320px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 16px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 126, 179, 0.15);
-  transition: transform 300ms ease, box-shadow 300ms ease;
+  transition: transform 400ms ease;
+  display: block;
 }
 
-.gallery-img:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(255, 126, 179, 0.2);
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 126, 179, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.gallery-icon {
+  font-size: 2.5rem;
+  color: #fff;
+  transform: scale(0.8);
+  transition: transform 300ms ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-item:hover .gallery-icon {
+  transform: scale(1);
+}
+
+.gallery-item:hover .gallery-img {
+  transform: scale(1.05);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 250ms ease;
+}
+
+.lightbox-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+#lightbox-img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 250ms ease;
+  z-index: 10;
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+  font-size: 1.8rem;
+}
+
+.lightbox-prev {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.lightbox-next {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 126, 179, 0.9);
+  border-color: var(--rose);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-close:hover {
+  transform: scale(1.1);
+}
+
+.lightbox-counter {
+  color: #fff;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
 }
 
 .note {
@@ -568,6 +734,15 @@ body.valentine {
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
     padding: 48px 18px;
@@ -580,5 +755,40 @@ body.valentine {
 
   .cta-row {
     gap: 10px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+  }
+
+  .lightbox-close {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .lightbox-prev {
+    left: 10px;
+  }
+
+  .lightbox-next {
+    right: 10px;
+  }
+
+  #lightbox-img {
+    max-height: 80vh;
+  }
+
+  .card-with-bg {
+    min-height: 180px;
   }
 }

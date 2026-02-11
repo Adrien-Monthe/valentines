@@ -5,17 +5,26 @@
   const note = document.getElementById('response-note');
   const modal = document.getElementById('love-modal');
   const closeModal = document.getElementById('close-modal');
+  // Lightbox elements
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  const galleryItems = document.querySelectorAll('.gallery-item');
 
   if (!hero || !yesBtn || !maybeBtn) return;
 
   const heartSymbols = ['❤', '💕', '💖'];
   const confettiColors = ['#ff7eb3', '#ff4f7d', '#ffd166', '#fff', '#c56cf0'];
 
-  // Initialize EmailJS with your public key
-  // TODO: Replace with your actual EmailJS public key after setup
-  // Get your key from: https://dashboard.emailjs.com/admin/account
+  let currentImageIndex = 0;
+  const totalImages = galleryItems.length;
+
+  // Initialize EmailJS with your public key (replace placeholder when ready)
   if (typeof emailjs !== 'undefined') {
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your actual public key
+    emailjs.init('YOUR_PUBLIC_KEY');
   }
 
   const heartTimer = setInterval(() => spawnHeart(hero), 900);
@@ -26,8 +35,6 @@
     note?.classList.remove('hidden');
     launchConfetti(confettiColors);
     modal?.classList.remove('hidden');
-
-    // Send email notification
     sendEmailNotification();
   });
 
@@ -41,30 +48,84 @@
     if (event.target === modal) modal.classList.add('hidden');
   });
 
+  // Gallery lightbox
+  galleryItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentImageIndex = index;
+      openLightbox();
+    });
+  });
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  lightboxPrev?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPreviousImage();
+  });
+
+  lightboxNext?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showNextImage();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('hidden')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPreviousImage();
+      if (e.key === 'ArrowRight') showNextImage();
+    }
+  });
+
+  function openLightbox() {
+    const img = galleryItems[currentImageIndex].querySelector('img');
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    updateCounter();
+    lightbox?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function showPreviousImage() {
+    currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+    const img = galleryItems[currentImageIndex].querySelector('img');
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    updateCounter();
+  }
+
+  function showNextImage() {
+    currentImageIndex = (currentImageIndex + 1) % totalImages;
+    const img = galleryItems[currentImageIndex].querySelector('img');
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    updateCounter();
+  }
+
+  function updateCounter() {
+    if (lightboxCounter) lightboxCounter.textContent = `${currentImageIndex + 1} / ${totalImages}`;
+  }
+
   window.addEventListener('beforeunload', () => clearInterval(heartTimer));
 
   function sendEmailNotification() {
-    // Check if EmailJS is loaded
-    if (typeof emailjs === 'undefined') {
-      console.log('EmailJS not loaded - email notification skipped');
-      return;
-    }
-
+    if (typeof emailjs === 'undefined') return;
     const templateParams = {
       to_name: 'Adrien',
       from_name: 'Moon (Kesita)',
       message: 'She said YES! 🎉💘 Kesita accepted your Valentine proposal!',
       reply_to: 'noreply@valentine.com'
     };
-
-    // TODO: Replace with your actual service ID and template ID
-    // Get these from: https://dashboard.emailjs.com/admin
     emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-      .then((response) => {
-        console.log('Email sent successfully!', response.status, response.text);
-      }, (error) => {
-        console.log('Email failed to send:', error);
-      });
+      .then((response) => console.log('Email sent', response.status, response.text))
+      .catch((error) => console.log('Email failed', error));
   }
 
   function spawnHeart(container) {
@@ -87,9 +148,7 @@
     const offsetY = randomInRange(-maxOffsetY, maxOffsetY);
     const tilt = randomInRange(-10, 10);
     button.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${tilt}deg)`;
-    setTimeout(() => {
-      button.style.transform = 'translate(0, 0)';
-    }, 1400);
+    setTimeout(() => { button.style.transform = 'translate(0, 0)'; }, 1400);
   }
 
   function launchConfetti(colors) {
